@@ -1,7 +1,7 @@
 package ru.job4j.inheritance;
 
 public class Surgeon extends Doctor {
-    int experience;
+    private int experience;
 
     public Surgeon(String name, String surname, String education, String birthday, int experience) {
         super(name, surname, education, birthday);
