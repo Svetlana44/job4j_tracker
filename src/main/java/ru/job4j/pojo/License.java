@@ -38,6 +38,7 @@ public class License {
     }
 
     public void setCreated(Date created) {
+
         this.created = created;
     }
 
