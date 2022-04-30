@@ -51,7 +51,6 @@ public class Tracker {
         if (bo) {
             item.setId(id);
             items[index] = item;
-            items[index].setName(item.getName());
         }
         return indexOf(id) != -1;
     }
