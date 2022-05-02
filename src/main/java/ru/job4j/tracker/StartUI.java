@@ -35,9 +35,7 @@ public class StartUI {
                 System.out.print("Enter name: ");
                 String name = scanner.nextLine();
                 Item item = new Item(name);
-                tracker.replace(id, item);
-                if (tracker.replace(id, item)
-                ) {
+                if (tracker.replace(id, item)) {
                     System.out.println("Заявка изменена успешно.");
                 } else {
                     System.out.println("Ошибка замены заявки.");
