@@ -1,7 +1,5 @@
 package ru.job4j.tracker;
 
-import java.util.Arrays;
-
 public class StartUI {
 
     public void init(Input input, Tracker tracker) {
@@ -89,7 +87,7 @@ public class StartUI {
     }
 
     public static void main(String[] args) {
-       Input input = new ConsoleInput();
+        Input input = new ConsoleInput();
         Tracker tracker = new Tracker();
         new StartUI().init(input, tracker);
     }
