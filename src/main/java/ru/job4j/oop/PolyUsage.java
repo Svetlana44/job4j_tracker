@@ -5,7 +5,7 @@ public class PolyUsage {
         Vehicle plane = new Plane();
         Vehicle trane = new Trane();
         Vehicle bus = new Bus();
-        Vehicle [] vehicles = {plane,trane,bus};
+        Vehicle[] vehicles = {plane, trane, bus};
         for (Vehicle vehicle:vehicles) {
             vehicle.move();
         }
