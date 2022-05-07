@@ -2,9 +2,8 @@ package ru.job4j.tracker;
 
 import org.junit.Test;
 
-import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertNull;
 
 public class TrackerTest {
     @Test
@@ -86,6 +85,6 @@ public class TrackerTest {
         tracker.add(bug);
         int id = bug.getId();
         tracker.delete(id);
-        assertEquals(tracker.findById(id), nullValue());
+        assertNull(tracker.findById(id));
     }
 }
