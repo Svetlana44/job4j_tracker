@@ -8,30 +8,6 @@ import static org.junit.Assert.assertNull;
 public class StartUITest {
 
     @Test
-    public void whenAddItem() {
-        String[] answers = {"Fix PC"};
-        Input input = new StubInput(answers);
-        Tracker tracker = new Tracker();
-        CreateAction createAction = new CreateAction();
-        createAction.execute(new StubInput(answers), tracker);
-        Item created = tracker.findAll()[0];
-        Item expected = new Item("Fix PC");
-        assertEquals(created.getName(), expected.getName());
-    }
-
-    @Test
-    public void whenCreateItem() {
-        String[] answers = {"Fix PC"};
-        Input input = new StubInput(answers);
-        Tracker tracker = new Tracker();
-        CreateAction createAction = new CreateAction();
-        createAction.execute(new StubInput(answers), tracker);
-        Item created = tracker.findAll()[0];
-        Item expected = new Item("Fix PC");
-        assertEquals(created.getName(), expected.getName());
-    }
-
-    @Test
     public void whenEditItem() {
         Tracker tracker = new Tracker();
         Item item = new Item("new item");
@@ -56,16 +32,16 @@ public class StartUITest {
     }
 
     @Test
-    public void InitwhenCreateItem() {
+    public void whenCreateItem() {
         Input in = new StubInput(
-                new String[] {"0", "Item name", "1"}
+                new String[]{"0", "Item name", "1"}
         );
         Tracker tracker = new Tracker();
         UserAction[] actions = {
                 new CreateAction(),
                 new ExitAction()
         };
-        new StartUI().init(in, tracker,actions);
+        new StartUI().init(in, tracker, actions);
         assertEquals(tracker.findAll()[0].getName(), "Item name");
     }
 }
