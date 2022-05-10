@@ -3,7 +3,7 @@ package ru.job4j.tracker;
 public class DeleteAction implements UserAction {
     @Override
     public String name() {
-        return null;
+        return "Delete item";
     }
 
     @Override

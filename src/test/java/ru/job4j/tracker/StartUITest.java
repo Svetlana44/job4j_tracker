@@ -54,4 +54,18 @@ public class StartUITest {
         Item deleted = tracker.findById(item.getId());
         assertNull(deleted);
     }
+
+    @Test
+    public void InitwhenCreateItem() {
+        Input in = new StubInput(
+                new String[] {"0", "Item name", "1"}
+        );
+        Tracker tracker = new Tracker();
+        UserAction[] actions = {
+                new CreateAction(),
+                new ExitAction()
+        };
+        new StartUI().init(in, tracker,actions);
+        assertEquals(tracker.findAll()[0].getName(), "Item name");
+    }
 }
