@@ -10,7 +10,6 @@ public class UserStore {
         throw new UserNotFoundException("User not found");
     }
 
-
     public static boolean validate(User user) throws UserInvalidException {
         if (!user.isValid() || user.getUsername().length() < 3) {
             throw new UserInvalidException("User is invalid.");
