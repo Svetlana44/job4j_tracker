@@ -16,7 +16,6 @@ public final class SingleTracker {
         return singleTracker;
     }
 
-
     public Item add(Item item) {
         return tracker.add(item);
     }
@@ -46,4 +45,3 @@ public final class SingleTracker {
         return result;
     }
 }
-
