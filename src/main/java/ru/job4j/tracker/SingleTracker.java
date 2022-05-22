@@ -3,8 +3,6 @@ package ru.job4j.tracker;
 public final class SingleTracker {
     private static SingleTracker singleTracker = null;
     private Tracker tracker = new Tracker();
-    private String[] massages = new String[1000];
-    private int index;
 
     private SingleTracker() {
     }
@@ -21,27 +19,26 @@ public final class SingleTracker {
     }
 
     public Item findById(int id) {
-        return null;
+        return tracker.findById(id);
     }
 
     public Item[] findAll() {
-        return null;
+        return tracker.findAll();
     }
 
     public Item[] findByName(String key) {
-        return null;
+        return tracker.findByName(key);
     }
 
-    private int indexOf(int id) {
-        return -1;
+    public int indexOf(int id) {
+        return tracker.indexOf(id);
     }
 
     public boolean replace(int id, Item item) {
-        return index != -1;
+        return tracker.replace(id, item);
     }
 
     public boolean delete(int id) {
-        boolean result = index != -1;
-        return result;
+        return tracker.delete(id);
     }
 }

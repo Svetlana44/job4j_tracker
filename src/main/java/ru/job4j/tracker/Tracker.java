@@ -36,7 +36,7 @@ public class Tracker {
         return Arrays.copyOf(temp, index);
     }
 
-    private int indexOf(int id) {
+    public int indexOf(int id) {
         for (int i = 0; i < size; i++) {
             if (items[i].getId() == id) {
                 return i;
