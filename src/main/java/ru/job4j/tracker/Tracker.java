@@ -1,6 +1,5 @@
 package ru.job4j.tracker;
 
-import java.lang.reflect.Array;
 import java.util.Arrays;
 
 public class Tracker {
@@ -36,7 +35,7 @@ public class Tracker {
         return Arrays.copyOf(temp, index);
     }
 
-    public int indexOf(int id) {
+    private int indexOf(int id) {
         for (int i = 0; i < size; i++) {
             if (items[i].getId() == id) {
                 return i;
