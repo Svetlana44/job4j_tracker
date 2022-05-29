@@ -9,13 +9,6 @@ public class PhoneDictionary {
         this.persons.add(person);
     }
 
-    /**
-     * Вернуть список всех пользователей, который содержат key в любых полях.
-     *
-     * @param key Ключ поиска.
-     * @return Список подощедщих пользователей.
-     * Поиск мы должны осуществлять по всем полям через метод String.contains.
-     */
     public ArrayList<Person> find(String key) {
         ArrayList<Person> result = new ArrayList<>();
         for (Person person : persons) {
