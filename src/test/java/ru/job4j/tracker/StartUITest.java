@@ -155,7 +155,7 @@ public class StartUITest {
                 new ExitAction(out)
         };
         new StartUI(out).init(in, tracker, actions);
-        assertEquals(tracker.findAll()[0].getName(), replaced);
+        assertEquals(tracker.findAll().get(0).getName(), replaced);
     }
 
     @Test
@@ -186,6 +186,6 @@ public class StartUITest {
                 new ExitAction(out)
         };
         new StartUI(out).init(in, tracker, actions);
-        assertEquals(tracker.findAll()[0].getName(), "Item name");
+        assertEquals(tracker.findAll().get(0).getName(), "Item name");
     }
 }
