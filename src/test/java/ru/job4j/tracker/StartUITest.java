@@ -4,6 +4,8 @@ import org.junit.Test;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
+import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
@@ -16,9 +18,9 @@ public class StartUITest {
                 new String[]{"7", "0"}
         );
         Tracker tracker = new Tracker();
-        UserAction[] actions = new UserAction[]{
+        List<UserAction> actions = Arrays.asList(
                 new ExitAction(out)
-        };
+        );
         new StartUI(out).init(in, tracker, actions);
         String ln = System.lineSeparator();
         assertEquals(out.toString(),
@@ -40,10 +42,10 @@ public class StartUITest {
         Input in = new StubInput(
                 new String[]{"0", String.valueOf(one.getId()), replaceName, "1"}
         );
-        UserAction[] actions = new UserAction[]{
+        List<UserAction> actions = Arrays.asList(
                 new ReplaceAction(out),
                 new ExitAction(out)
-        };
+        );
         new StartUI(out).init(in, tracker, actions);
         String ln = System.lineSeparator();
         assertEquals(out.toString(),
@@ -65,10 +67,10 @@ public class StartUITest {
         Item one = tracker.add(new Item("test1"));
         Input in = new StubInput(
                 new String[]{"0", "test1", "1"});
-        UserAction[] actions = new UserAction[]{
+        List<UserAction> actions = Arrays.asList(
                 new FindItemsByNameAction(out),
                 new ExitAction(out)
-        };
+        );
         new StartUI(out).init(in, tracker, actions);
         String ln = System.lineSeparator();
         LocalDateTime localDateTime = LocalDateTime.now();
@@ -92,10 +94,10 @@ public class StartUITest {
         Item one = tracker.add(new Item("test1"));
         Input in = new StubInput(
                 new String[]{"0", String.valueOf(one.getId()), "1"});
-        UserAction[] actions = new UserAction[]{
+        List<UserAction> actions = Arrays.asList(
                 new FindItemByIdAction(out),
                 new ExitAction(out)
-        };
+        );
         new StartUI(out).init(in, tracker, actions);
         String ln = System.lineSeparator();
         LocalDateTime localDateTime = LocalDateTime.now();
@@ -121,10 +123,10 @@ public class StartUITest {
         Item one = tracker.add(new Item("test1"));
         Input in = new StubInput(
                 new String[]{"0", "1"});
-        UserAction[] actions = new UserAction[]{
+        List<UserAction> actions = Arrays.asList(
                 new ShowAllItemAction(out),
                 new ExitAction(out)
-        };
+        );
         new StartUI(out).init(in, tracker, actions);
         String ln = System.lineSeparator();
         LocalDateTime localDateTime = LocalDateTime.now();
@@ -150,10 +152,10 @@ public class StartUITest {
         Input in = new StubInput(
                 new String[]{"0", String.valueOf(item.getId()), "Item name edited", "1"}
         );
-        UserAction[] actions = {
+        List<UserAction> actions = Arrays.asList(
                 new ReplaceAction(out),
                 new ExitAction(out)
-        };
+        );
         new StartUI(out).init(in, tracker, actions);
         assertEquals(tracker.findAll().get(0).getName(), replaced);
     }
@@ -166,10 +168,10 @@ public class StartUITest {
         Input in = new StubInput(
                 new String[]{"0", String.valueOf(item.getId()), "1"}
         );
-        UserAction[] actions = {
+        List<UserAction> actions = Arrays.asList(
                 new DeleteAction(out),
                 new ExitAction(out)
-        };
+        );
         new StartUI(out).init(in, tracker, actions);
         assertNull(tracker.findById(item.getId()));
     }
@@ -181,10 +183,10 @@ public class StartUITest {
                 new String[]{"0", "Item name", "1"}
         );
         Tracker tracker = new Tracker();
-        UserAction[] actions = {
+        List<UserAction> actions = Arrays.asList(
                 new CreateAction(out),
                 new ExitAction(out)
-        };
+        );
         new StartUI(out).init(in, tracker, actions);
         assertEquals(tracker.findAll().get(0).getName(), "Item name");
     }
