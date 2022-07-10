@@ -45,8 +45,8 @@ public class DepDescCompTest {
     @Test
     public void myCompareFirstDepartmentIsEqualsThenZero() {
         int rsl = new DepDescComp().compare(
-                "K2/SK1",
-                "K2/SK1"
+                "K2/SK1/SSK1",
+                "K2/SK1/SSK1"
         );
         assertTrue(rsl == 0);
     }
