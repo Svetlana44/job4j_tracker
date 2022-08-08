@@ -1,7 +1,6 @@
 package ru.job4j.map;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class AnalyzeByMap {
     public static double averageScore(List<Pupil> pupils) {
@@ -33,19 +32,19 @@ public class AnalyzeByMap {
     }
 
     public static List<Label> averageScoreBySubject(List<Pupil> pupils) {
+        Map<String, Integer> temp = new LinkedHashMap();
         List<Label> labels = new ArrayList<>();
-        double sumMath = 0D;
-        double sumLang = 0D;
-        double sumPhilosophy = 0D;
         for (Pupil pupil : pupils) {
             List<Subject> subjects = pupil.subjects();
-            sumMath += subjects.get(0).score();
-            sumLang += subjects.get(1).score();
-            sumPhilosophy += subjects.get(2).score();
+            for (Subject subject : subjects) {
+                if (!temp.containsKey(subject.name())) {
+                    temp.put(subject.name(), subject.score());
+                } else {
+                    temp.replace(subject.name(), subject.score() + temp.get(subject.name()));
+                }
+            }
         }
-        labels.add(new Label("Math", sumMath / pupils.size()));
-        labels.add(new Label("Lang", sumLang / pupils.size()));
-        labels.add(new Label("Philosophy", sumPhilosophy / pupils.size()));
+        temp.forEach((k, v) -> labels.add(new Label(k, v / pupils.size())));
         return labels;
     }
 
@@ -58,38 +57,25 @@ public class AnalyzeByMap {
             }
             labels.add(new Label(pupil.name(), sumScore));
         }
-        Label best = null;
-        if (!labels.isEmpty()) {
-            best = labels.get(0);
-        }
-        for (int i = 1; i < labels.size(); i++) {
-            if (labels.get(i).score() > best.score()) {
-                best = labels.get(i);
-            }
-        }
-        return best;
+        labels.sort(Comparator.naturalOrder());
+        return labels.get(labels.size() - 1);
     }
 
     public static Label bestSubject(List<Pupil> pupils) {
         List<Label> labels = new ArrayList<>();
-        double sumMath = 0D;
-        double sumLang = 0D;
-        double sumPhilosophy = 0D;
+        Map<String, Integer> temp = new LinkedHashMap();
         for (Pupil pupil : pupils) {
             List<Subject> subjects = pupil.subjects();
-            sumMath += subjects.get(0).score();
-            sumLang += subjects.get(1).score();
-            sumPhilosophy += subjects.get(2).score();
+            subjects.forEach((a) -> {
+                if (!temp.containsKey(a.name())) {
+                    temp.put(a.name(), a.score());
+                } else {
+                    temp.replace(a.name(), temp.get(a.name()) + a.score());
+                }
+            });
         }
-        labels.add(new Label("Math", sumMath));
-        labels.add(new Label("Lang", sumLang));
-        labels.add(new Label("Philosophy", sumPhilosophy));
-        Label label = labels.get(0);
-        for (int i = 1; i < labels.size(); i++) {
-            if (labels.get(i).score() > label.score()) {
-                label = labels.get(i);
-            }
-        }
-        return label;
+        temp.forEach((k, v) -> labels.add(new Label(k, v)));
+        labels.sort(Comparator.naturalOrder());
+        return labels.get(labels.size() - 1);
     }
 }
