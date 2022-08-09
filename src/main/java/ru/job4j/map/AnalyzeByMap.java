@@ -66,13 +66,10 @@ public class AnalyzeByMap {
         Map<String, Integer> temp = new LinkedHashMap();
         for (Pupil pupil : pupils) {
             List<Subject> subjects = pupil.subjects();
-            subjects.forEach((a) -> {
-                if (!temp.containsKey(a.name())) {
-                    temp.put(a.name(), a.score());
-                } else {
-                    temp.replace(a.name(), temp.get(a.name()) + a.score());
-                }
-            });
+            subjects.forEach(subject ->
+                    temp.merge(subject.name(),
+                            subject.score(),
+                            Integer::sum));
         }
         temp.forEach((k, v) -> labels.add(new Label(k, v)));
         labels.sort(Comparator.naturalOrder());
