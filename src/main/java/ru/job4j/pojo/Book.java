@@ -1,27 +1,15 @@
 package ru.job4j.pojo;
 
 public class Book {
-    private String name;
-    private int countPage;
+    public class PrintNTo0 {
+        public static void main(String[] args) {
+            out(10);
+        }
 
-    public Book(String name, int countPage) {
-        this.name = name;
-        this.countPage = countPage;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public int getCountPage() {
-        return countPage;
-    }
-
-    public void setCountPage(int countPage) {
-        this.countPage = countPage;
+        public static void out(int n) {
+            for (int i = n - 1; i > -1; i--) {
+                System.out.println(i);
+            }
+        }
     }
 }
