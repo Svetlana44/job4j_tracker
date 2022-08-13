@@ -1,9 +1,9 @@
 package ru.job4j.early;
 
-import org.junit.Assert;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThrows;
 import static ru.job4j.early.PasswordValidator.validate;
 
 public class PasswordValidatorTest {
@@ -19,55 +19,50 @@ public class PasswordValidatorTest {
     @Test
     public void validateWhenInvalidFlagUpper() {
         String password = "321567aa@";
-        String expected = "Invalid password.";
-        String actual = validate(password);
-        assertEquals(expected, actual);
+        assertThrows("Invalid password.",
+                IllegalArgumentException.class, () -> validate(password));
     }
 
     @Test
     public void validateWhenInvalidFlagLower() {
         String password = "321567AA@";
-        String expected = "Invalid password.";
-        String actual = validate(password);
-        assertEquals(expected, actual);
+        assertThrows("Invalid password.",
+                IllegalArgumentException.class, () -> validate(password));
     }
 
     @Test
     public void validateWhenInvalidflagDigit() {
         String password = "aaaaaaaAA@";
-        String expected = "Invalid password.";
-        String actual = validate(password);
-        assertEquals(expected, actual);
+        assertThrows("Invalid password.",
+                IllegalArgumentException.class, () -> validate(password));
     }
 
     @Test
     public void validateWhenInvalidFlagSymbol() {
         String password = "321567AAa";
-        String expected = "Invalid password.";
-        String actual = validate(password);
-        assertEquals(expected, actual);
+        assertThrows("Invalid password.",
+                IllegalArgumentException.class, () -> validate(password));
     }
 
     @Test
-    public void validateWhenInvalidFlagSubStr() {
+    public void validateWhenInvalidSubStr() {
         String password = "passwordAa@";
-        String expected = "Invalid password.";
-        String actual = validate(password);
-        assertEquals(expected, actual);
+        assertThrows("Password can't to contein one from substrings.",
+                IllegalArgumentException.class, () -> PasswordValidator.validate(password));
     }
 
     @Test
     public void validateWhenInvalidLength() {
         String password = "1dAa@";
-        String expected = "Invalid password.";
-        String actual = validate(password);
-        assertEquals(expected, actual);
+        assertThrows("Invalid password. Length mast be less then 8 and more then 32.",
+                IllegalArgumentException.class, () -> PasswordValidator.validate(password));
     }
 
     @Test
     public void validateWhenNull() {
         String password = null;
-        Assert.assertThrows("Password can't to be is null", IllegalArgumentException.class, () -> PasswordValidator.validate(password));
+        assertThrows("Password can't to be is null",
+                IllegalArgumentException.class, () -> PasswordValidator.validate(password));
     }
 
 }

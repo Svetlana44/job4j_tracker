@@ -6,7 +6,7 @@ public class PasswordValidator {
             throw new IllegalArgumentException("Password can't to be is null");
         }
         if (password.length() < 8 || password.length() > 32) {
-            return "Invalid password.";
+            throw new IllegalArgumentException("Invalid password. Length mast be less then 8 and more then 32.");
         }
         boolean flagUpper = false;
         boolean flagLower = false;
@@ -25,19 +25,21 @@ public class PasswordValidator {
             }
             if (!Character.isLetterOrDigit(password.charAt(i))) {
                 flagSymbol = true;
-
             }
+            if (flagUpper && flagLower && flagDigit && flagSymbol) {
+                break;
+            }
+
         }
-        boolean flagSubStr = false;
         String[] siqvence = {"qwerty", "12345", "password", "admin", "user"};
         for (String str : siqvence) {
             if (password.equalsIgnoreCase(str)) {
-                flagSubStr = true;
+                throw new IllegalArgumentException("Password can't to contein one from substrings.");
             }
         }
-        if (flagUpper && flagLower && flagDigit && flagSymbol && !flagSubStr) {
-            return "Valid password.";
+        if (!flagUpper || !flagLower || !flagDigit || !flagSymbol) {
+            throw new IllegalArgumentException("Invalid password.");
         }
-        return "Invalid password.";
+        return "Valid password.";
     }
 }
