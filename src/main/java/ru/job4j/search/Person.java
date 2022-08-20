@@ -40,7 +40,10 @@ public class Person {
             return false;
         }
         Person person = (Person) o;
-        return Objects.equals(name, person.name) && Objects.equals(surname, person.surname) && Objects.equals(phone, person.phone) && Objects.equals(address, person.address);
+        return Objects.equals(name, person.name)
+                && Objects.equals(surname, person.surname)
+                && Objects.equals(phone, person.phone)
+                && Objects.equals(address, person.address);
     }
 
     @Override
