@@ -10,4 +10,12 @@ public class Profile {
     public Address getAddress() {
         return address;
     }
+
+    @Override
+    public String toString() {
+        return "Profile{"
+                + "address="
+                + address
+                + '}';
+    }
 }
