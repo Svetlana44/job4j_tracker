@@ -5,8 +5,8 @@ import java.util.stream.Stream;
 public class DoubleLoop {
     public static void main(String[] args) {
         Stream.of(Suit.values())
-                .flatMap(value -> Stream.of(Value.values())
-                        .map(suit -> value + " " + suit))
+                .flatMap(suit -> Stream.of(Value.values())
+                        .map(value -> new Card(suit, value)))
                 .forEach(System.out::println);
     }
 }
