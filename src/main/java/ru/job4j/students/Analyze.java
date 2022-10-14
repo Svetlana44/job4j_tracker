@@ -41,7 +41,7 @@ public class Analyze {
                 .entrySet().stream()
                 .map(entry -> new Tuple(entry.getKey(), entry.getValue()))
                 .collect(Collectors.toList())
-                .stream().max(Comparator.comparingDouble(Tuple::score)).get();
+                .stream().max(Comparator.comparingDouble(Tuple::score)).orElse(new Tuple("", 0.0));
     }
 
     public static Tuple bestSubject(Stream<Pupil> stream) {
@@ -52,6 +52,6 @@ public class Analyze {
                 .entrySet().stream()
                 .map(entry -> new Tuple(entry.getKey(), entry.getValue()))
                 .collect(Collectors.toList())
-                .stream().max(Comparator.comparingDouble(Tuple::score)).get();
+                .stream().max(Comparator.comparingDouble(Tuple::score)).orElse(new Tuple("", 0.0));
     }
 }
