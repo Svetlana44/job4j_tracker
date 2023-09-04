@@ -1,13 +1,17 @@
 package ru.job4j.tracker;
 
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
 import static java.util.List.copyOf;
 
-public class Tracker {
+public class MemTracker implements Store {
     private final List<Item> items = new ArrayList<>();
     private int ids = 1;
+
+    private Connection cn;
 
     public Item add(Item item) {
         item.setId(ids++);
@@ -53,12 +57,19 @@ public class Tracker {
         return index != -1;
     }
 
-    public boolean delete(int id) {
+    public void delete(int id) {
         int index = indexOf(id);
         boolean result = index != -1;
         if (result) {
             items.remove(index);
         }
-        return result;
+/*        return result;  */
+    }
+
+    @Override
+    public void close() throws SQLException {
+        if (cn != null) {
+            cn.close();
+        }
     }
 }
