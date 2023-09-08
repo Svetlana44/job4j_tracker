@@ -81,7 +81,7 @@ public class SqlTracker implements Store {
             preparedStatement.setString(1, item.getName());
 
             LocalDateTime currentDateTime = LocalDateTime.now();
-// Преобразует в java.sql.Timestamp
+/* Преобразует в java.sql.Timestamp */
             Timestamp timestamp = Timestamp.valueOf(currentDateTime);
             preparedStatement.setTimestamp(2, timestamp);
             preparedStatement.execute();
@@ -98,7 +98,6 @@ public class SqlTracker implements Store {
 
     @Override
     public boolean replace(int id, Item item) {
-        Item itemSourse = findById(id);
         String updateStr = "UPDATE test SET name = ? WHERE id = ?";
         try (PreparedStatement preparedStatement = cn.prepareStatement(updateStr)) {
             preparedStatement.setString(1, item.getName());
