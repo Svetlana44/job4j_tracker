@@ -7,12 +7,15 @@
 
 package ru.job4j.tracker.store;
 
-import ru.job4j.tracker.*;
+import ru.job4j.tracker.Item;
+import ru.job4j.tracker.Store;
 
 import java.io.InputStream;
 import java.sql.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Properties;
 
 public class SqlTracker implements Store {
@@ -51,15 +54,16 @@ public class SqlTracker implements Store {
         }
     }
 
-    public void createTable() {
+/*    public void createTable() {
 
         String creatTableSql = "CREATE TABLE IF NOT EXISTS test("
                 + "id serial primary key,"
-                + "name varchar(20)"
-                + "); COMMIT;";
+                + "name text,"
+                + "created timestamp"
+                + ");";
         statementExecute(creatTableSql);
 
-    }
+    }  */
 
     @Override
     public void close() throws SQLException {
@@ -68,12 +72,24 @@ public class SqlTracker implements Store {
         }
     }
 
+    /* Метод добавления должен устанавливать Item id, сгенерированное БД
+    Время создания заявки не должно изменяться*/
     @Override
     public Item add(Item item) {
-        String addItem = "INSERT INTO test(name) values(?); COMMIT;";
-        try (PreparedStatement preparedStatement = cn.prepareStatement(addItem)) {
+        String addItem = "INSERT INTO test(name,created) values(?,?);";
+        try (PreparedStatement preparedStatement = cn.prepareStatement(addItem, Statement.RETURN_GENERATED_KEYS)) {
             preparedStatement.setString(1, item.getName());
+
+            LocalDateTime currentDateTime = LocalDateTime.now();
+// Преобразует в java.sql.Timestamp
+            Timestamp timestamp = Timestamp.valueOf(currentDateTime);
+            preparedStatement.setTimestamp(2, timestamp);
             preparedStatement.execute();
+            try (ResultSet key = preparedStatement.getGeneratedKeys()) {
+                if (key.next()) {
+                    item.setId(key.getInt(1));
+                }
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -82,12 +98,13 @@ public class SqlTracker implements Store {
 
     @Override
     public boolean replace(int id, Item item) {
+        Item itemSourse = findById(id);
         String updateStr = "UPDATE test SET name = ? WHERE id = ?";
         try (PreparedStatement preparedStatement = cn.prepareStatement(updateStr)) {
             preparedStatement.setString(1, item.getName());
             preparedStatement.setInt(2, id);
 
-            return preparedStatement.execute();
+            preparedStatement.execute();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -95,7 +112,7 @@ public class SqlTracker implements Store {
     }
 
     @Override
-    public void delete(int id) {
+    public boolean delete(int id) {
         String delStr = "DELETE FROM test WHERE id=?;";
         try (PreparedStatement preparedStatement = cn.prepareStatement(delStr)) {
             preparedStatement.setInt(1, id);
@@ -103,6 +120,11 @@ public class SqlTracker implements Store {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        Optional<String> optionalItem = Optional.ofNullable(findById(id).getName());
+        if (optionalItem.isPresent()) {
+            return false;
+        }
+        return true;
     }
 
     @Override
@@ -112,8 +134,11 @@ public class SqlTracker implements Store {
                 "SELECT * FROM test;")) {
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 while (resultSet.next()) {
+                    Timestamp timestamp = resultSet.getTimestamp(3);
                     items.add(new Item(resultSet.getInt("id"),
-                            resultSet.getString("name")));
+                            resultSet.getString("name"),
+                            timestamp.toLocalDateTime())
+                    );
                 }
             } catch (SQLException e) {
                 e.printStackTrace();
@@ -161,7 +186,9 @@ public class SqlTracker implements Store {
 
     }
 
-    public static void main(String[] args) {
+/* запуск из   StartUI производится.
+  public static void main(String[] args) {
+
 
         SqlTracker sqlTracker = new SqlTracker();
         sqlTracker.createTable();
@@ -177,7 +204,7 @@ public class SqlTracker implements Store {
                     new ReplaceAction(output),
                     new DeleteAction(output),
                     /*                    new FindAllAction(output),*/
-                    new ShowAllItemAction(output),
+/*                    new ShowAllItemAction(output),
                     new FindItemByIdAction(output),
                     new FindItemsByNameAction(output),
                     new ExitAction(output)
@@ -186,5 +213,5 @@ public class SqlTracker implements Store {
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
+    }*/
 }
