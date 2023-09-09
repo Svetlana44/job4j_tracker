@@ -81,7 +81,7 @@ public class SqlTracker implements Store {
             preparedStatement.setString(1, item.getName());
 
             LocalDateTime currentDateTime = LocalDateTime.now();
-/* Преобразует в java.sql.Timestamp */
+            /* Преобразует в java.sql.Timestamp */
             Timestamp timestamp = Timestamp.valueOf(currentDateTime);
             preparedStatement.setTimestamp(2, timestamp);
             preparedStatement.execute();
@@ -111,7 +111,7 @@ public class SqlTracker implements Store {
     }
 
     @Override
-    public boolean delete(int id) {
+    public void delete(int id) {
         String delStr = "DELETE FROM test WHERE id=?;";
         try (PreparedStatement preparedStatement = cn.prepareStatement(delStr)) {
             preparedStatement.setInt(1, id);
@@ -121,9 +121,10 @@ public class SqlTracker implements Store {
         }
         Optional<String> optionalItem = Optional.ofNullable(findById(id).getName());
         if (optionalItem.isPresent()) {
-            return false;
+            System.out.println("Заявка удалена успешно. <-SqlTrecker->");
+            return;
         }
-        return true;
+        System.out.println("Ошибка удаления заявки. <-SqlTrecker->");
     }
 
     @Override
@@ -157,7 +158,10 @@ public class SqlTracker implements Store {
             preparedStatement.setString(1, key);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 while (resultSet.next()) {
-                    items.add(new Item(resultSet.getInt("id"), resultSet.getString("name")));
+                    Timestamp timestamp = resultSet.getTimestamp(3);
+                    items.add(new Item(resultSet.getInt("id"),
+                            resultSet.getString("name"),
+                            timestamp.toLocalDateTime()));
                 }
             }
         } catch (SQLException e) {
