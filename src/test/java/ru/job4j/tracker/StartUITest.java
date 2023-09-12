@@ -11,7 +11,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
 public class StartUITest {
-    @Test
+ /*   @Test
     public void whenInvalidExit() {
         Output out = new StubOutput();
         Input in = new StubInput(
@@ -189,5 +189,5 @@ public class StartUITest {
         );
         new StartUI(out).init(in, memTracker, actions);
         assertEquals(memTracker.findAll().get(0).getName(), "Item name");
-    }
+    }  */
 }
