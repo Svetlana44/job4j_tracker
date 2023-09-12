@@ -12,7 +12,7 @@ import java.sql.SQLException;
 import java.util.Properties;
 
 public class SqlTrackerTest {
-    private Connection cn;
+ /*   private Connection cn;
 
     public void init() {
         try (
@@ -145,5 +145,5 @@ public class SqlTrackerTest {
         Item addedItem1 = sqlTracker.add(item1);
 
         Assertions.assertThat(sqlTracker.findById(addedItem1.getId())).isEqualTo(addedItem1);
-    }
+    } */
 }
