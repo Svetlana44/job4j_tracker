@@ -1,5 +1,6 @@
 package ru.job4j.tracker;
 
+import java.util.List;
 import java.util.Optional;
 
 public class DeleteAction implements UserAction {
@@ -16,15 +17,21 @@ public class DeleteAction implements UserAction {
 
     @Override
     public boolean execute(Input input, Store memTracker) {
-        out.println("=== Delete item ===");
-        int id = input.askInt("Enter id: ");
-        memTracker.delete(id);
-        Optional<Item> optionalItem = Optional.ofNullable(memTracker.findById(id));
-        if (optionalItem.isEmpty()) {
-            System.out.println("Ошибка удаления заявки. <-SqlTrecker->");
-            return false;
+        Optional<List<Item>> optionalAll = Optional.ofNullable(memTracker.findAll());
+        if (!optionalAll.get().isEmpty()) {
+            out.println("=== Delete item ===");
+            int id = input.askInt("Enter id: ");
+
+            Optional<String> optionalItem = Optional.ofNullable(memTracker.findById(id).getName());
+            if (optionalItem.isEmpty()) {
+                out.println("Ошибка удаления заявки. <-SqlTrecker->");
+            } else {
+                memTracker.delete(id);
+                out.println("Заявка удалена успешно. <-SqlTrecker->");
+            }
+        } else {
+            out.println("Заявок ещё нет. <-SqlTrecker->");
         }
-        System.out.println("Заявка удалена успешно. <-SqlTrecker->");
         return true;
     }
 }

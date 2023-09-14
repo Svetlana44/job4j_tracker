@@ -11,7 +11,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
 public class StartUITest {
- /*   @Test
+    @Test
     public void whenInvalidExit() {
         Output out = new StubOutput();
         Input in = new StubInput(
@@ -173,6 +173,16 @@ public class StartUITest {
                 new ExitAction(out)
         );
         new StartUI(out).init(in, memTracker, actions);
+        String expected = "Menu." + System.lineSeparator()
+                + "0. Delete item" + System.lineSeparator()
+                + "1. Exit Program" + System.lineSeparator()
+                + "=== Delete item ===" + System.lineSeparator()
+                + "Заявка удалена успешно. <-SqlTrecker->" + System.lineSeparator()
+                + "Menu." + System.lineSeparator()
+                + "0. Delete item" + System.lineSeparator()
+                + "1. Exit Program" + System.lineSeparator()
+                + "App is closed." + System.lineSeparator();
+        assertEquals(expected, out.toString());
         assertNull(memTracker.findById(item.getId()));
     }
 
@@ -188,6 +198,16 @@ public class StartUITest {
                 new ExitAction(out)
         );
         new StartUI(out).init(in, memTracker, actions);
+        String expected = "Menu." + System.lineSeparator()
+                + "0. Add new Item" + System.lineSeparator()
+                + "1. Exit Program" + System.lineSeparator()
+                + "=== Create a new Item ===" + System.lineSeparator()
+                + "Добавленная заявка: Item name" + System.lineSeparator()
+                + "Menu." + System.lineSeparator()
+                + "0. Add new Item" + System.lineSeparator()
+                + "1. Exit Program" + System.lineSeparator()
+                + "App is closed." + System.lineSeparator();
+        assertEquals(expected, out.toString());
         assertEquals(memTracker.findAll().get(0).getName(), "Item name");
-    }  */
+    }
 }
