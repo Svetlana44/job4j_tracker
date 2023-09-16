@@ -1,6 +1,6 @@
-package ru.job4j.tracker;
+package ru.job4j.stream.tracker;
 
-import ru.job4j.tracker.store.SqlTracker;
+import ru.job4j.stream.tracker.store.SqlTracker;
 
 import java.util.Arrays;
 import java.util.List;

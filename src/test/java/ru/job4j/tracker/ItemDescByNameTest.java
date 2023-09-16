@@ -2,6 +2,8 @@ package ru.job4j.tracker;
 
 import org.junit.Assert;
 import org.junit.Test;
+import ru.job4j.stream.tracker.Item;
+import ru.job4j.stream.tracker.ItemDescByName;
 
 import java.util.ArrayList;
 import java.util.Arrays;

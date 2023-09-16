@@ -5,10 +5,10 @@
 Также важно запомнить, что методы execute(), executeUpdate() и executeQuery() интерфейса PreparedStatement не принимают никаких аргументов,
  в отличие от одноименных методов Statement. Они выполняют указанный при создании объекта SQL-запрос с подставленными аргументами. */
 
-package ru.job4j.tracker.store;
+package ru.job4j.stream.tracker.store;
 
-import ru.job4j.tracker.Item;
-import ru.job4j.tracker.Store;
+import ru.job4j.stream.tracker.Store;
+import ru.job4j.stream.tracker.Item;
 
 import java.io.FileInputStream;
 import java.io.InputStream;
