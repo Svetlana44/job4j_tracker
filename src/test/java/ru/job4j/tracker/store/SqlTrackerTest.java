@@ -1,138 +1,173 @@
 package ru.job4j.tracker.store;
 
-public class SqlTrackerTest {
- /*   private Connection cn;
+import org.junit.jupiter.api.*;
+import ru.job4j.stream.tracker.Item;
+import ru.job4j.stream.tracker.store.SqlTracker;
 
-    public void init() {
-        try (
-                InputStream in = SqlTracker.class.getClassLoader()
-                        .getResourceAsStream("app.properties")) {
+import java.io.FileInputStream;
+import java.io.InputStream;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.util.Properties;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
+public class SqlTrackerTest {
+
+    private static Connection connection;
+
+    @BeforeAll
+    public static void initConnection() {
+        try (InputStream in = new FileInputStream("db/liquibase_test.properties")) {
             Properties config = new Properties();
             config.load(in);
             Class.forName(config.getProperty("driver-class-name"));
-            cn = DriverManager.getConnection(
+            connection = DriverManager.getConnection(
                     config.getProperty("url"),
                     config.getProperty("username"),
                     config.getProperty("password")
+
             );
         } catch (Exception e) {
             throw new IllegalStateException(e);
         }
     }
 
-    @Test
-    public void statementExecute() {
-        init();
-        try (PreparedStatement preparedStatement = cn.prepareStatement("SELECT * FROM test;")) {
-            boolean actual = preparedStatement.execute();
-            Assertions.assertThat(actual).isTrue();
-        } catch (SQLException e) {
-            e.printStackTrace();
+    @AfterAll
+    public static void closeConnection() throws SQLException {
+        connection.close();
+    }
+
+    @BeforeEach
+    public void wipeTableBefor() throws SQLException {
+        try (PreparedStatement statement = connection.prepareStatement("delete from items")) {
+            statement.execute();
+        }
+    }
+
+    @AfterEach
+    public void wipeTableAfter() throws SQLException {
+        try (PreparedStatement statement = connection.prepareStatement("delete from items")) {
+            statement.execute();
         }
     }
 
     @Test
+    public void whenSaveItemAndFindByGeneratedIdThenMustBeTheSame() {
+        SqlTracker tracker = new SqlTracker(connection);
+        Item item = new Item("item");
+        tracker.add(item);
+        assertThat(tracker.findById(item.getId())).isEqualTo(item);
+    }
+
+    /*my tests*/
+
+    @Test
     public void close() throws SQLException {
-        init();
-        Assertions.assertThat(cn.isClosed()).isFalse();
-        cn.close();
-        Assertions.assertThat(cn.isClosed()).isTrue();
+        initConnection();
+        assertThat(connection.isClosed()).isFalse();
+        connection.close();
+        assertThat(connection.isClosed()).isTrue();
+        initConnection();
     }
 
     @Test
     public void add() {
-        init();
         Item item = new Item("item33");
-        SqlTracker sqlTracker = new SqlTracker();
+        SqlTracker sqlTracker = new SqlTracker(connection);
         Item actual = sqlTracker.add(item);
 
-        Assertions.assertThat(actual).isEqualTo(item);
+        assertThat(actual).isEqualTo(item);
     }
 
     @Test
     public void replace() {
-        init();
         Item item = new Item("item333");
-        SqlTracker sqlTracker = new SqlTracker();
+        SqlTracker sqlTracker = new SqlTracker(connection);
         Item addedItem = sqlTracker.add(item);
         int id = addedItem.getId();
 
         boolean actual = sqlTracker.replace(id, new Item("replacesItem"))
                 && (sqlTracker.findById(id).getName().equals("replacesItem"));
-        Assertions.assertThat(actual).isTrue();
+        assertThat(actual).isTrue();
     }
 
     @Test
     public void delete() {
-        init();
         Item item = new Item("itemDel333");
-        SqlTracker sqlTracker = new SqlTracker();
-        Item addedItem = sqlTracker.add(item);
-        boolean actual = sqlTracker.findByName("itemDel333").equals(item);
-        Assertions.assertThat(actual).isFalse();
+        SqlTracker sqlTracker = new SqlTracker(connection);
+        sqlTracker.add(item);
+        sqlTracker.delete(item.getId());
+        int actualId = sqlTracker.findById(item.getId()).getId();
+        assertThat(actualId).isNotEqualTo(item.getId()).isEqualTo(0);
     }
 
     @Test
     public void findAll() {
-        init();
-        String delStr = "DELETE FROM test;";
-        try (PreparedStatement preparedStatement = cn.prepareStatement(delStr)) {
-            preparedStatement.execute();
+        try {
+            wipeTableAfter();
         } catch (SQLException e) {
             e.printStackTrace();
         }
         Item item1 = new Item("insertedItem1");
         Item item2 = new Item("insertedItem2");
-        SqlTracker sqlTracker = new SqlTracker();
+        SqlTracker sqlTracker = new SqlTracker(connection);
         Item addedItem1 = sqlTracker.add(item1);
         Item addedItem2 = sqlTracker.add(item2);
 
         boolean result = true;
         for (Item item : sqlTracker.findAll()) {
-            if (!(item.equals(addedItem1) || item.equals(addedItem2))) {
+            if (!item.equals(addedItem1)
+                    && !item.equals(addedItem2)) {
                 result = false;
             }
         }
-        Assertions.assertThat(result).isTrue();
+        try {
+            wipeTableAfter();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        assertThat(result).isTrue();
     }
 
     @Test
     public void findByName() {
-        init();
-        String delStr = "DELETE FROM test;";
-        try (PreparedStatement preparedStatement = cn.prepareStatement(delStr)) {
+        String delStr = "DELETE FROM items;";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(delStr)) {
             preparedStatement.execute();
         } catch (SQLException e) {
             e.printStackTrace();
         }
         Item item1 = new Item("findedItem1");
         Item item2 = new Item("findedItem1");
-        SqlTracker sqlTracker = new SqlTracker();
+        SqlTracker sqlTracker = new SqlTracker(connection);
         Item addedItem1 = sqlTracker.add(item1);
         Item addedItem2 = sqlTracker.add(item2);
 
         boolean result = true;
         for (Item item : sqlTracker.findByName("findedItem1")) {
-            if (!(item.equals(addedItem1) || item.equals(addedItem2))) {
+            if (!item.equals(addedItem1)
+                    && !item.equals(addedItem2)) {
                 result = false;
             }
         }
-        Assertions.assertThat(result).isTrue();
+        assertThat(result).isTrue();
     }
 
     @Test
     public void findById() {
-        init();
-        String delStr = "DELETE FROM test;";
-        try (PreparedStatement preparedStatement = cn.prepareStatement(delStr)) {
+        String delStr = "DELETE FROM items;";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(delStr)) {
             preparedStatement.execute();
         } catch (SQLException e) {
             e.printStackTrace();
         }
         Item item1 = new Item("findedIdItem1");
-        SqlTracker sqlTracker = new SqlTracker();
+        SqlTracker sqlTracker = new SqlTracker(connection);
         Item addedItem1 = sqlTracker.add(item1);
 
-        Assertions.assertThat(sqlTracker.findById(addedItem1.getId())).isEqualTo(addedItem1);
-    } */
+        assertThat(sqlTracker.findById(addedItem1.getId())).isEqualTo(addedItem1);
+    }
 }
