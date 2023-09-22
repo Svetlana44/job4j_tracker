@@ -47,7 +47,8 @@ public class Item implements Comparable<Item> {
     public LocalDateTime getCreated() {
         return created.withNano(0);
     }
-    public LocalDateTime setCreated(){
+
+    public LocalDateTime setCreated() {
         return created.withNano(0);
     }
 
