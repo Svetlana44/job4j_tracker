@@ -7,7 +7,7 @@ import java.util.Objects;
 public class Item implements Comparable<Item> {
     private int id;
     private String name;
-    private LocalDateTime created = LocalDateTime.now();
+    private LocalDateTime created = LocalDateTime.now().withNano(0);
     private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("dd-MMMM-EEEE-yyyy HH:mm:ss");
 
     public Item() {
@@ -25,7 +25,7 @@ public class Item implements Comparable<Item> {
     public Item(int id, String name, LocalDateTime created) {
         this.id = id;
         this.name = name;
-        this.created = created;
+        this.created = created.withNano(0);
     }
 
     public int getId() {
@@ -45,8 +45,10 @@ public class Item implements Comparable<Item> {
     }
 
     public LocalDateTime getCreated() {
-
-        return created;
+        return created.withNano(0);
+    }
+    public LocalDateTime setCreated(){
+        return created.withNano(0);
     }
 
     @Override
@@ -76,7 +78,8 @@ public class Item implements Comparable<Item> {
             return false;
         }
         Item item = (Item) o;
-        return id == item.id && Objects.equals(name, item.name) && Objects.equals(created.format(DateTimeFormatter.BASIC_ISO_DATE), item.created.format(DateTimeFormatter.BASIC_ISO_DATE));
+
+        return id == item.id && Objects.equals(name, item.name) && Objects.equals(created, item.created);
     }
 
     @Override
