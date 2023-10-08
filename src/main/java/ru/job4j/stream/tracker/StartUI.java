@@ -1,6 +1,8 @@
 package ru.job4j.stream.tracker;
 
 import ru.job4j.stream.tracker.store.SqlTracker;
+import ru.job4j.tracker.CreateManyItems;
+import ru.job4j.tracker.DeleteAllItems;
 
 import java.util.Arrays;
 import java.util.List;
@@ -37,8 +39,11 @@ public class StartUI {
     public static void main(String[] args) {
         Output output = new ConsoleOutput();
         Input input = new ValidateInput(output, new ConsoleInput());
-        Store sqlTracker = new SqlTracker();
+ /*       Store sqlTracker = new SqlTracker();  */
+        Store memTracker = new MemTracker();
         List<UserAction> actions = Arrays.asList(
+                new CreateManyItems(output),
+                new DeleteAllItems(output),
                 new CreateAction(output),
                 new ShowAllItemAction(output),
                 new DeleteAction(output),
@@ -47,6 +52,6 @@ public class StartUI {
                 new ReplaceAction(output),
                 new ExitAction(output)
         );
-        new StartUI(output).init(input, sqlTracker, actions);
+        new StartUI(output).init(input, memTracker, actions);
     }
 }
